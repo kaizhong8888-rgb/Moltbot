@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Search, Plus, Mail, Phone, Calendar, MessageSquare, MoreVertical } from 'lucide-react'
+import { Search, Plus, Mail, Phone, Calendar, MessageSquare, MoreVertical, X } from 'lucide-react'
 import Card from '@/components/Card'
 import { contactService, Contact } from '@/services/contacts'
 import clsx from 'clsx'
@@ -20,6 +20,7 @@ export default function Contacts() {
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [showNewContactModal, setShowNewContactModal] = useState(false)
 
   useEffect(() => {
     const fetchContacts = async () => {
@@ -70,7 +71,10 @@ export default function Contacts() {
             <h1 className="text-2xl font-bold text-gray-900">{t('contacts.title')}</h1>
             <p className="text-gray-500 mt-1">{filteredContacts.length} contacts</p>
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+          <button
+            className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+            onClick={() => setShowNewContactModal(true)}
+          >
             <Plus size={18} />
             {t('contacts.newContact')}
           </button>
@@ -236,6 +240,76 @@ export default function Contacts() {
           </div>
         )}
       </Card>
+
+      {/* New Contact Modal */}
+      {showNewContactModal && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center animate-fadeIn">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-lg mx-4 animate-fadeIn">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-semibold text-gray-900">New Contact</h2>
+              <button
+                onClick={() => setShowNewContactModal(false)}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X size={20} className="text-gray-500" />
+              </button>
+            </div>
+            <form onSubmit={(e) => { e.preventDefault(); setShowNewContactModal(false); }}>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Name</label>
+                  <input
+                    type="text"
+                    placeholder="Full name"
+                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                  <input
+                    type="email"
+                    placeholder="Email address"
+                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Phone</label>
+                  <input
+                    type="tel"
+                    placeholder="Phone number"
+                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Company</label>
+                  <input
+                    type="text"
+                    placeholder="Company name"
+                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                  />
+                </div>
+              </div>
+              <div className="flex gap-3 mt-6">
+                <button
+                  type="button"
+                  onClick={() => setShowNewContactModal(false)}
+                  className="flex-1 px-4 py-2 border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                >
+                  Create Contact
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

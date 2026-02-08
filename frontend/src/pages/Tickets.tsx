@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Search, Filter, Plus, MoreVertical, Mail, Phone, MessageSquare } from 'lucide-react'
+import { Search, Filter, Plus, MoreVertical, Mail, Phone, MessageSquare, X } from 'lucide-react'
 import Card from '@/components/Card'
 import { ticketService, Ticket, TicketStatus, TicketPriority } from '@/services/tickets'
 import clsx from 'clsx'
@@ -35,6 +35,7 @@ export default function Tickets() {
   const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null)
   const [isLoading, setIsLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
+  const [showNewTicketModal, setShowNewTicketModal] = useState(false)
 
   useEffect(() => {
     const fetchTickets = async () => {
@@ -89,7 +90,10 @@ export default function Tickets() {
             <h1 className="text-2xl font-bold text-gray-900">{t('tickets.title')}</h1>
             <p className="text-gray-500 mt-1">{filteredTickets.length} tickets found</p>
           </div>
-          <button className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors">
+          <button
+            className="flex items-center gap-2 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+            onClick={() => setShowNewTicketModal(true)}
+          >
             <Plus size={18} />
             {t('tickets.newTicket')}
           </button>
@@ -260,6 +264,80 @@ export default function Tickets() {
           </div>
         )}
       </Card>
+
+      {/* New Ticket Modal */}
+      {showNewTicketModal && (
+        <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center animate-fadeIn">
+          <div className="bg-white rounded-2xl p-6 w-full max-w-lg mx-4 animate-fadeIn">
+            <div className="flex items-center justify-between mb-6">
+              <h2 className="text-xl font-semibold text-gray-900">New Ticket</h2>
+              <button
+                onClick={() => setShowNewTicketModal(false)}
+                className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <X size={20} className="text-gray-500" />
+              </button>
+            </div>
+            <form onSubmit={(e) => { e.preventDefault(); setShowNewTicketModal(false); }}>
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Subject</label>
+                  <input
+                    type="text"
+                    placeholder="Brief description of the issue"
+                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500"
+                    required
+                  />
+                </div>
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1">Description</label>
+                  <textarea
+                    placeholder="Detailed description..."
+                    rows={4}
+                    className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500 resize-none"
+                    required
+                  />
+                </div>
+                <div className="grid grid-cols-2 gap-4">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Priority</label>
+                    <select className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
+                      <option value="low">Low</option>
+                      <option value="medium">Medium</option>
+                      <option value="high">High</option>
+                      <option value="urgent">Urgent</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-1">Category</label>
+                    <select className="w-full px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary-500">
+                      <option value="technical">Technical</option>
+                      <option value="billing">Billing</option>
+                      <option value="general">General</option>
+                      <option value="feature">Feature Request</option>
+                    </select>
+                  </div>
+                </div>
+              </div>
+              <div className="flex gap-3 mt-6">
+                <button
+                  type="button"
+                  onClick={() => setShowNewTicketModal(false)}
+                  className="flex-1 px-4 py-2 border border-gray-200 rounded-lg text-gray-700 hover:bg-gray-50 transition-colors"
+                >
+                  Cancel
+                </button>
+                <button
+                  type="submit"
+                  className="flex-1 px-4 py-2 bg-primary-600 text-white rounded-lg hover:bg-primary-700 transition-colors"
+                >
+                  Create Ticket
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
