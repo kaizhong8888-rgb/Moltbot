@@ -82,7 +82,7 @@ function Header({ onMenuClick }: { onMenuClick: () => void }) {
           <Icons.Menu />
         </button>
         <div className="header-search">
-          <Icons.Search />
+          <span className="search-icon"><Icons.Search /></span>
           <input type="text" id="search" name="search" placeholder="搜索..." />
         </div>
       </div>

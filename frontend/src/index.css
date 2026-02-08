@@ -22,3 +22,35 @@ p {
 button {
   cursor: pointer;
 }
+
+.header-search {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  background: #f1f5f9;
+  border-radius: 8px;
+  padding: 8px 12px;
+}
+
+.header-search input {
+  border: none;
+  background: transparent;
+  outline: none;
+  font-size: 14px;
+  width: 200px;
+  color: #334155;
+}
+
+.header-search input::placeholder {
+  color: #94a3b8;
+}
+
+.search-icon {
+  display: flex;
+  color: #94a3b8;
+}
+
+.search-icon svg {
+  width: 16px;
+  height: 16px;
+}
