@@ -19,7 +19,6 @@ export default function Contacts() {
   const [contacts, setContacts] = useState<Contact[]>([])
   const [selectedContact, setSelectedContact] = useState<Contact | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [showNewContactModal, setShowNewContactModal] = useState(false)
 
   useEffect(() => {
@@ -32,7 +31,7 @@ export default function Contacts() {
         if (response.data.length > 0 && !selectedContact) {
           setSelectedContact(response.data[0])
         }
-      } catch (err) {
+      } catch (err: unknown) {
         console.error('Failed to fetch contacts:', err)
         setContacts(mockContacts)
         if (mockContacts.length > 0 && !selectedContact) {

@@ -29,7 +29,6 @@ export default function KnowledgeBase() {
   const [articles, setArticles] = useState<KnowledgeArticle[]>([])
   const [categoryList, setCategoryList] = useState<Category[]>([])
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [showNewArticleModal, setShowNewArticleModal] = useState(false)
 
   useEffect(() => {
@@ -44,7 +43,7 @@ export default function KnowledgeBase() {
         ])
         setArticles(articlesRes.data)
         setCategoryList(categoriesRes.data)
-      } catch (err) {
+      } catch (err: unknown) {
         console.error('Failed to fetch data:', err)
         setArticles(mockArticles)
       } finally {

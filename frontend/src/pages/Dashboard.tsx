@@ -78,7 +78,7 @@ export default function Dashboard() {
         ])
         setStats(dashboardData)
         setTicketVolume(volumeData)
-      } catch (err) {
+      } catch (err: unknown) {
         console.error('Failed to fetch dashboard data:', err)
         // Use mock data as fallback when API is unavailable
         setStats({

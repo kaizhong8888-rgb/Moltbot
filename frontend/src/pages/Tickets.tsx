@@ -1,8 +1,8 @@
 import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
-import { Search, Filter, Plus, MoreVertical, Mail, Phone, MessageSquare, X } from 'lucide-react'
+import { Search, Filter, Plus, MoreVertical, MessageSquare, X } from 'lucide-react'
 import Card from '@/components/Card'
-import { ticketService, Ticket, TicketStatus, TicketPriority } from '@/services/tickets'
+import { ticketService, Ticket, TicketStatus } from '@/services/tickets'
 import clsx from 'clsx'
 
 const statusConfig = {
@@ -34,7 +34,6 @@ export default function Tickets() {
   const [tickets, setTickets] = useState<Ticket[]>([])
   const [selectedTicket, setSelectedTicket] = useState<Ticket | null>(null)
   const [isLoading, setIsLoading] = useState(true)
-  const [error, setError] = useState<string | null>(null)
   const [showNewTicketModal, setShowNewTicketModal] = useState(false)
 
   useEffect(() => {
@@ -48,7 +47,7 @@ export default function Tickets() {
         if (response.data.length > 0 && !selectedTicket) {
           setSelectedTicket(response.data[0])
         }
-      } catch (err) {
+      } catch (err: unknown) {
         console.error('Failed to fetch tickets:', err)
         // Use mock data on error
         setTickets(mockTickets)

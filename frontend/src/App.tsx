@@ -97,6 +97,7 @@ function Header({ onMenuClick, onLogout }: HeaderProps) {
         </button>
         <div className="header-search">
           <span className="search-icon"><Icons.Search /></span>
+          <label htmlFor="search" className="sr-only">{currentLang === 'zh' ? '搜索' : 'Search'}</label>
           <input type="text" id="search" name="search" placeholder={currentLang === 'zh' ? '搜索...' : 'Search...'} />
         </div>
       </div>

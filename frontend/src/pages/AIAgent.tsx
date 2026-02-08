@@ -71,7 +71,7 @@ export default function AIAgent() {
         if (response.data.length > 0 && !selectedAgent) {
           setSelectedAgent(response.data[0])
         }
-      } catch (err) {
+      } catch (err: unknown) {
         console.error('Failed to fetch agents:', err)
         setAgents(mockAgents)
         if (mockAgents.length > 0 && !selectedAgent) {

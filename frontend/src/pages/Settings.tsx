@@ -2,7 +2,7 @@ import { useEffect, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import { useAppStore } from '@/stores'
 import { useAuth } from '@/contexts/AuthContext'
-import { User, Bell, Link2, Users, CreditCard, Globe, Moon, Shield, Save, Check } from 'lucide-react'
+import { User, Bell, Link2, Users, CreditCard, Globe, Moon, Save, Check } from 'lucide-react'
 import Card from '@/components/Card'
 import { settingsService, GeneralSettings, NotificationSettings, BillingInfo } from '@/services/settings'
 import clsx from 'clsx'
@@ -39,7 +39,7 @@ export default function Settings() {
         setNotificationSettings(notifications)
         setBillingInfo(billing)
         setDarkMode(general.theme === 'dark')
-      } catch (err) {
+      } catch (err: unknown) {
         console.error('Failed to fetch settings:', err)
       } finally {
         setIsLoading(false)
