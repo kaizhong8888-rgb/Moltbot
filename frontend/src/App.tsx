@@ -10,6 +10,11 @@ import KnowledgeBase from './pages/KnowledgeBase'
 import Reports from './pages/Reports'
 import Settings from './pages/Settings'
 
+interface HeaderProps {
+  onMenuClick: () => void
+  onLogout: () => void
+}
+
 // SVG Icons as components
 const Icons = {
   Home: () => <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2"><path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/></svg>,
@@ -73,9 +78,10 @@ function Sidebar({ collapsed }: { collapsed: boolean }) {
   )
 }
 
-function Header({ onMenuClick }: { onMenuClick: () => void }) {
+function Header({ onMenuClick, onLogout }: HeaderProps) {
   const { i18n } = useTranslation()
   const [currentLang, setCurrentLang] = useState('zh')
+  const [showUserMenu, setShowUserMenu] = useState(false)
 
   const toggleLanguage = () => {
     const newLang = currentLang === 'zh' ? 'en' : 'zh'
@@ -106,21 +112,37 @@ function Header({ onMenuClick }: { onMenuClick: () => void }) {
           <Icons.Bell />
           <span className="header-badge"></span>
         </button>
-        <div className="header-user-info">
-          <div className="header-user-name">Admin User</div>
-          <div className="header-user-role">Administrator</div>
+        <div className="header-user-section" style={{ position: 'relative' }}>
+          <div
+            className="header-user-info"
+            onClick={() => setShowUserMenu(!showUserMenu)}
+            style={{ cursor: 'pointer' }}
+          >
+            <div className="header-user-name">Admin User</div>
+            <div className="header-user-role">Administrator</div>
+          </div>
+          <div className="header-avatar">A</div>
+          {showUserMenu && (
+            <div className="user-dropdown">
+              <div className="user-dropdown-item" onClick={() => { setShowUserMenu(false); window.location.href = '/settings'; }}>
+                Settings
+              </div>
+              <div className="user-dropdown-item" onClick={() => { setShowUserMenu(false); onLogout(); }}>
+                Logout
+              </div>
+            </div>
+          )}
         </div>
-        <div className="header-avatar">A</div>
       </div>
     </header>
   )
 }
 
-function Layout({ children, collapsed, onToggle }: { children: React.ReactNode; collapsed: boolean; onToggle: () => void }) {
+function Layout({ children, collapsed, onToggle, onLogout }: { children: React.ReactNode; collapsed: boolean; onToggle: () => void; onLogout: () => void }) {
   return (
     <div className="min-h-screen bg-gray-50">
       <Sidebar collapsed={collapsed} />
-      <Header onMenuClick={onToggle} />
+      <Header onMenuClick={onToggle} onLogout={onLogout} />
       <main className={`main-content ${collapsed ? 'main-content-collapsed' : ''}`}>
         <div className="p-6">
           {children}
@@ -133,6 +155,11 @@ function Layout({ children, collapsed, onToggle }: { children: React.ReactNode; 
 function App() {
   const [sidebarCollapsed, setSidebarCollapsed] = useState(false)
 
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    window.location.href = '/login'
+  }
+
   return (
     <AuthProvider>
       <BrowserRouter>
@@ -141,7 +168,7 @@ function App() {
           <Route
             path="/*"
             element={
-              <Layout collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed(!sidebarCollapsed)}>
+              <Layout collapsed={sidebarCollapsed} onToggle={() => setSidebarCollapsed(!sidebarCollapsed)} onLogout={handleLogout}>
                 <Routes>
                   <Route path="/" element={<Navigate to="/dashboard" replace />} />
                   <Route path="/dashboard" element={<Dashboard />} />

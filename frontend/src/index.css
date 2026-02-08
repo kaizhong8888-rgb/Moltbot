@@ -54,3 +54,28 @@ button {
   width: 16px;
   height: 16px;
 }
+
+.user-dropdown {
+  position: absolute;
+  top: 100%;
+  right: 0;
+  margin-top: 8px;
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  min-width: 150px;
+  padding: 8px 0;
+  z-index: 100;
+}
+
+.user-dropdown-item {
+  padding: 10px 16px;
+  cursor: pointer;
+  color: #334155;
+  font-size: 14px;
+  transition: background 0.2s;
+}
+
+.user-dropdown-item:hover {
+  background: #f1f5f9;
+}
