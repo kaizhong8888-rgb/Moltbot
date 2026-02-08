@@ -1,5 +1,6 @@
 import { BrowserRouter, Routes, Route, Navigate, useLocation, useNavigate } from 'react-router-dom'
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { AuthProvider } from './contexts/AuthContext'
 import Dashboard from './pages/Dashboard'
 import Tickets from './pages/Tickets'
@@ -73,7 +74,14 @@ function Sidebar({ collapsed }: { collapsed: boolean }) {
 }
 
 function Header({ onMenuClick }: { onMenuClick: () => void }) {
+  const { i18n } = useTranslation()
   const [currentLang, setCurrentLang] = useState('zh')
+
+  const toggleLanguage = () => {
+    const newLang = currentLang === 'zh' ? 'en' : 'zh'
+    setCurrentLang(newLang)
+    i18n.changeLanguage(newLang)
+  }
 
   return (
     <header className="header">
@@ -83,13 +91,13 @@ function Header({ onMenuClick }: { onMenuClick: () => void }) {
         </button>
         <div className="header-search">
           <span className="search-icon"><Icons.Search /></span>
-          <input type="text" id="search" name="search" placeholder="搜索..." />
+          <input type="text" id="search" name="search" placeholder={currentLang === 'zh' ? '搜索...' : 'Search...'} />
         </div>
       </div>
       <div className="header-right">
         <button
           className="header-icon-btn"
-          onClick={() => setCurrentLang(currentLang === 'zh' ? 'en' : 'zh')}
+          onClick={toggleLanguage}
           title={currentLang === 'zh' ? 'Switch to English' : '切换到中文'}
         >
           <Icons.Globe />
